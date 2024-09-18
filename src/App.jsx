@@ -1,5 +1,6 @@
 import 'bulma/css/bulma.css';
 import { useState } from 'react';
+import classNames from 'classnames';
 import './App.scss';
 
 export const goods = [
@@ -22,7 +23,9 @@ export const App = () => {
   return (
     <main className="section container">
       <h1
-        className={`title ${selectedGood && 'is-flex is-align-items-center'}`}
+        className={classNames('title', {
+          'is-flex is-align-items-center': selectedGood,
+        })}
       >
         {selectedGood ? `${selectedGood} is selected` : 'No goods selected'}
 
@@ -40,38 +43,36 @@ export const App = () => {
         <tbody>
           {goods.map(good => {
             const isSelected = selectedGood === good;
+            const handleSelection = isSelected
+              ? clearSelection
+              : () => setSelectedGood(good);
 
             return (
               <tr
                 key={good}
                 data-cy="Good"
-                className={isSelected ? 'has-background-success-light' : ''}
+                className={classNames({
+                  'has-background-success-light': isSelected,
+                })}
               >
                 <td>
-                  {isSelected ? (
-                    <button
-                      data-cy="RemoveButton"
-                      type="button"
-                      className="button is-info"
-                      onClick={clearSelection}
-                    >
-                      -
-                    </button>
-                  ) : (
-                    <button
-                      data-cy="AddButton"
-                      type="button"
-                      className="button"
-                      onClick={() => setSelectedGood(good)}
-                    >
-                      +
-                    </button>
-                  )}
+                  <button
+                    data-cy={isSelected ? 'RemoveButton' : 'AddButton'}
+                    type="button"
+                    className={classNames('button', {
+                      'is-info': isSelected,
+                    })}
+                    onClick={handleSelection}
+                  >
+                    {isSelected ? '-' : '+'}
+                  </button>
                 </td>
 
                 <td
                   data-cy="GoodTitle"
-                  className={`is-vcentered ${isSelected ? 'has-text-black' : ''}`}
+                  className={classNames('is-vcentered', {
+                    'has-text-black': isSelected,
+                  })}
                 >
                   {good}
                 </td>
