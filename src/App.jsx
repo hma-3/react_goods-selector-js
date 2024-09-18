@@ -19,6 +19,9 @@ export const goods = [
 export const App = () => {
   const [selectedGood, setSelectedGood] = useState('Jam');
   const clearSelection = () => setSelectedGood('');
+  const handleSelection = good => {
+    setSelectedGood(previousGood => (previousGood === good ? '' : good));
+  };
 
   return (
     <main className="section container">
@@ -43,9 +46,6 @@ export const App = () => {
         <tbody>
           {goods.map(good => {
             const isSelected = selectedGood === good;
-            const handleSelection = isSelected
-              ? clearSelection
-              : () => setSelectedGood(good);
 
             return (
               <tr
@@ -62,7 +62,7 @@ export const App = () => {
                     className={classNames('button', {
                       'is-info': isSelected,
                     })}
-                    onClick={handleSelection}
+                    onClick={() => handleSelection(good)}
                   >
                     {isSelected ? '-' : '+'}
                   </button>
